@@ -6,7 +6,9 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text rounded to="/">Home</v-btn>
-      <v-btn text rounded to="/login">Login</v-btn>
+      <v-btn v-if="!loggedIn" text rounded to="/login">Login</v-btn>
+      <v-btn v-if="loggedIn" text rounded to="/dashboard">Dashboard</v-btn>
+      <v-btn v-if="loggedIn" text rounded @click="logout" to="/">Logout</v-btn>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
@@ -33,6 +35,7 @@
 </template>
 
 <script>
+import { authComputed } from "./store/helpers";
 export default {
   name: "App",
   data() {
@@ -40,15 +43,32 @@ export default {
       showPassword: false,
       links: [
         {
-          label: 'Home',
-          url: '/'
+          label: "Home",
+          url: "/"
         },
         {
-          label: 'Login',
-          url: 'login'
+          label: "Login",
+          url: "/login"
+        },
+        {
+          label: "Register",
+          url: "/register"
+        },
+        {
+          label: "Dashboard",
+          url: "/dashboard"
         }
       ]
     };
+  },
+  computed: {
+    ...authComputed
+  },
+  methods: {
+    logout() {
+      console.log("Logged out");
+      this.$store.dispatch("logout");
+    }
   }
 };
 </script>
